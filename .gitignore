@@ -1,0 +1,14 @@
+# Credenciais. Nunca versionar, em hipotese nenhuma.
+hostgator.env
+*.env
+!*.env.exemplo
+
+# Lixo de sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Dependencias e cache, sempre reconstruiveis
+node_modules/
+.hyperframes/
+videos/*/snapshots/
