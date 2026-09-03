@@ -156,13 +156,35 @@ h1,h2,h3{font-family:var(--display);letter-spacing:-.022em}
   color:var(--accent);display:flex;align-items:center;gap:12px;margin-bottom:24px}
 .kick::before{content:"";width:26px;height:1px;background:var(--accent-muted);flex:none}
 
-/* Os cinco portoes. Identicos, caractere por caractere, aos do JavaScript. */
-@media (max-width:720px),
-       (orientation:portrait) and (max-width:1024px),
-       (orientation:portrait) and (pointer:coarse),
-       (orientation:landscape) and (pointer:coarse) and (max-height:560px),
+/* Os portoes do hero estatico. Identicos, caractere por caractere, aos do JavaScript.
+   Celular e tablet SAIRAM da lista: eles recebem o scrub em retrato.
+   Sobraram os dois casos em que o scrub nao tem como funcionar bem:
+   celular deitado, que nao tem altura para a jornada de texto, e
+   movimento reduzido, que e pedido explicito de acessibilidade. */
+@media (orientation:landscape) and (pointer:coarse) and (max-height:560px),
        (prefers-reduced-motion:reduce){
   #hero{display:none} #static-hero{display:flex}
+}
+
+/* ================= O hero em retrato =================
+   Some a coluna calma da esquerda, porque a maquina passa a ocupar o quadro
+   inteiro. Entao o texto desce para o rodape sobre um scrim de baixo para cima,
+   que e o padrao que funciona quando nao existe espaco negativo lateral. */
+@media (max-width:900px),(orientation:portrait) and (pointer:coarse){
+  #video{object-position:64% center}
+  #poster{background-position:64% center}
+  .band{align-items:flex-end;padding:0 clamp(22px,6vw,34px) clamp(96px,17vh,150px)}
+  .band .inner,#b5 .inner{max-width:100%}
+  .band h2{font-size:clamp(31px,7.8vw,46px);line-height:1.09}
+  .band::before{inset:0;
+    background:linear-gradient(to top,
+      rgba(3,7,14,.9) 0%,rgba(3,7,14,.74) 26%,rgba(3,7,14,.34) 55%,rgba(3,7,14,0) 82%)}
+  .band .sub{font-size:16.5px;max-width:32ch;margin-top:18px}
+  .band .row{margin-top:26px;gap:11px;width:100%}
+  .band .row .btn{flex:1 1 100%;justify-content:center}
+  #readout{display:none}
+  #cue{left:50%;transform:translateX(-50%);bottom:26px}
+  #scrim{background:radial-gradient(ellipse 130% 80% at 50% 42%,rgba(4,9,17,0) 34%,rgba(4,9,17,.5) 100%)}
 }
 
 /* ================= A pagina ================= */
@@ -280,21 +302,24 @@ details p{margin:0 0 28px;color:var(--text-secondary);max-width:62ch}
 /* CTA */
 #visita{border-top:1px solid var(--steel);background:var(--panel)}
 .contact{margin-top:56px;display:grid;gap:56px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-form label{display:block;margin-bottom:20px}
-form span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--text-secondary);margin-bottom:9px}
-form input,form textarea{width:100%;background:var(--canvas);border:1px solid var(--border-interactive);
-  color:var(--text-primary);font-family:var(--sans);font-size:16px;padding:14px 16px;border-radius:2px;
-  transition:border-color .3s var(--ease)}
-form input:focus,form textarea:focus{border-color:var(--accent);outline:none}
-form textarea{min-height:118px;resize:vertical}
-form button{margin-top:8px;background:var(--accent);color:#08111F;border:0;font-family:var(--mono);
-  font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;padding:16px 30px;
-  border-radius:2px;cursor:pointer;transition:background .3s var(--ease)}
-form button:hover{background:var(--accent-hover)}
-.micro{margin:16px 0 0;font-size:14px;color:var(--text-secondary)}
-.done{margin:20px 0 0;padding:16px 18px;border:1px solid var(--accent-muted);color:var(--accent);
-  font-size:15px;border-radius:2px}
+/* O botao do WhatsApp. Usa o verde da propria marca em vez do verde do
+   WhatsApp: o icone ja entrega qual app abre, e um segundo verde na
+   pagina brigaria com o acento. */
+.btn-zap{display:inline-flex;align-items:center;gap:13px;text-decoration:none;
+  background:var(--accent);color:#08111F;font-family:var(--mono);font-weight:500;
+  font-size:15px;letter-spacing:.05em;text-transform:uppercase;
+  padding:20px 34px;border-radius:3px;
+  transition:background .3s var(--ease),transform .3s var(--ease),box-shadow .3s var(--ease)}
+.btn-zap:hover{background:var(--accent-hover);transform:translateY(-2px);
+  box-shadow:0 14px 34px rgba(131,230,7,.22)}
+.btn-zap svg{width:26px;height:26px;flex:none;fill:currentColor}
+.micro{margin:20px 0 0;font-size:15px;color:var(--text-secondary);max-width:40ch}
+.tel-extra{margin:34px 0 0;padding-top:28px;border-top:1px solid var(--steel)}
+.tel-extra p{margin:0 0 6px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--text-secondary)}
+.tel-extra a{font-size:22px;text-decoration:none;font-family:var(--display);font-weight:600;
+  transition:color .3s var(--ease)}
+.tel-extra a:hover{color:var(--accent)}
 .dl{margin:0 0 26px}
 .dl dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--text-secondary);margin-bottom:6px}
@@ -486,7 +511,7 @@ body.paused *,body.paused *::before,body.paused *::after{animation-play-state:pa
 
   <section class="sec reveal" id="clientes">
     <p class="kick part">Trinta e cinco anos de chão de fábrica</p>
-    <h2 class="part">Elas não nos chamaram uma vez.</h2>
+    <h2 class="part">Parceiros que fizeram parte da nossa história.</h2>
     <p class="lede part">Nomes que aparecem na trajetória da Potcon, organizados por setor. A prova de um retrofit bem feito não é a foto da entrega. É a máquina ainda rodando dez anos depois, e a gente ainda atendendo o telefone.</p>
     <div class="clients part">
       <div class="cl"><h3>Alimentos e bebidas</h3>
@@ -523,19 +548,21 @@ body.paused *,body.paused *::before,body.paused *::after{animation-play-state:pa
   <section class="sec reveal" id="visita">
     <p class="kick part">Próximo passo</p>
     <h2 class="part">Qual máquina da sua planta está presa a um controle velho?</h2>
-    <p class="lede part">A primeira conversa é técnica, objetiva e sem compromisso. Uma visita muda a qualidade da conversa.</p>
+    <p class="lede part">A primeira conversa é técnica, objetiva e sem compromisso. Manda o contexto no WhatsApp e a engenharia responde.</p>
     <div class="contact part">
-      <form id="form">
-        <label><span>Seu nome</span><input type="text" name="nome" required autocomplete="name"></label>
-        <label><span>Empresa</span><input type="text" name="empresa" required autocomplete="organization"></label>
-        <label><span>Qual máquina ou linha te preocupa?</span><textarea name="contexto" required></textarea></label>
-        <button type="submit">Enviar contexto</button>
-        <p class="micro">Ao enviar, o seu aplicativo de e-mail abre com a mensagem pronta.</p>
-        <p class="done" id="done" hidden>Mensagem montada. Confira o seu aplicativo de e-mail e envie.</p>
-      </form>
+      <div>
+        <a class="btn-zap" href="https://wa.me/5519997772081?text=Ola%21%20Vim%20pelo%20site%20da%20Potcon.%20Queria%20falar%20sobre%20a%20reautomacao%20de%20uma%20maquina." target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.89-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.91-2.21-.25-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.7.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.08-.12-.28-.2-.57-.34m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.43 9.89-9.88 9.89m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.49-8.41"/></svg> Falar no WhatsApp
+        </a>
+        <p class="micro">Abre uma conversa direta com a engenharia da Potcon. Sem formulário, sem cadastro e sem esperar retorno de e-mail.</p>
+        <div class="tel-extra">
+          <p>Prefere ligar?</p>
+          <a href="tel:+551932336576">(19) 3233-6576</a>
+        </div>
+      </div>
       <div>
         <dl class="dl">
-          <dt>Telefone</dt><dd><a href="tel:+551932336576">(19) 3233-6576</a></dd>
+          <dt>WhatsApp</dt><dd><a href="https://wa.me/5519997772081?text=Ola%21%20Vim%20pelo%20site%20da%20Potcon.%20Queria%20falar%20sobre%20a%20reautomacao%20de%20uma%20maquina." target="_blank" rel="noopener noreferrer">(19) 99777-2081</a></dd>
           <dt>E-mail</dt><dd><a href="mailto:potcon@potcon.com.br">potcon@potcon.com.br</a></dd>
           <dt>Endereço</dt><dd>Av. Marechal Carmona, 506<br>Vila João Jorge, Campinas SP</dd>
           <dt>Atendimento</dt><dd>Horário comercial</dd>
@@ -689,9 +716,6 @@ function loadBlob(){
 }
 
 var GATES=[
-  "(max-width: 720px)",
-  "(orientation: portrait) and (max-width: 1024px)",
-  "(orientation: portrait) and (pointer: coarse)",
   "(orientation: landscape) and (pointer: coarse) and (max-height: 560px)",
   "(prefers-reduced-motion: reduce)"
 ];
@@ -807,19 +831,6 @@ if(hold){
   });
   reduced.addEventListener("change",function(e){if(e.matches){p=1;paint();complete();}});
 }
-
-/* ---------- O formulário ---------- */
-var form=document.getElementById("form"),done=document.getElementById("done");
-if(form) form.addEventListener("submit",function(e){
-  e.preventDefault();
-  var d=new FormData(form);
-  var assunto="Visita tecnica: "+(d.get("empresa")||"");
-  var corpo="Nome: "+(d.get("nome")||"")+"\nEmpresa: "+(d.get("empresa")||"")+
-            "\n\nMaquina ou linha:\n"+(d.get("contexto")||"");
-  window.location.href="mailto:potcon@potcon.com.br?subject="+encodeURIComponent(assunto)+
-    "&body="+encodeURIComponent(corpo);
-  done.hidden=false;
-});
 
 document.addEventListener("visibilitychange",function(){
   document.body.classList.toggle("paused",document.hidden);
